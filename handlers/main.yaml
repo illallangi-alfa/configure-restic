@@ -1,0 +1,9 @@
+---
+- name: "Restart Timer"
+  systemd:
+    daemon_reload: "yes"
+    name:          "{{ item }}"
+    state:         "restarted"
+  with_items:
+   - "restic.timer"
+  listen: "restic-restart"

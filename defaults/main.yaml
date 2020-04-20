@@ -1,0 +1,8 @@
+---
+install_restic_templates:
+  debian: &debian
+    - dest: "/etc/systemd/system/restic.timer"
+    - dest: "/etc/systemd/system/restic.service"
+    - dest: "/etc/sysconfig/restic.env.example"
+  debian_armv7l: *debian
+  debian_x86_64: *debian

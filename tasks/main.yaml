@@ -1,0 +1,28 @@
+---
+- name: "Create Directories"
+  file:
+    state: "directory"
+    path: "/etc/sysconfig"
+  tags:
+    - "restic"
+
+- name: "Apply Templates"
+  template:
+    dest: "{{ item.dest }}"
+    src:  "{{ (item.dest | basename ()) + '.j2' }}"
+    mode: "{{ item.mode | default('0644') }}"
+  notify: "restic-restart"
+  with_items: "{{ install_restic_templates[(ansible_os_family | lower) + '_' + (ansible_architecture | lower)] }}"
+  tags:
+    - restic
+
+- name: "Start and Enable Timer"
+  service:
+    name:          "{{ item }}"
+    enabled:       "yes"
+    state:         "started"
+    daemon_reload: "yes"
+  with_items:
+    - "restic.timer"
+  tags:
+    - restic

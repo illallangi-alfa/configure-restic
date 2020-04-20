@@ -1,0 +1,13 @@
+[Unit]
+Description=restic Service
+After=network.target
+AssertFileNotEmpty=/etc/sysconfig/restic.env
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/sysconfig/restic.env
+ExecStart=/usr/bin/restic backup --one-file-system -v -v --exclude /var/lib/docker/ --exclude /var/log/ /
+StandardOutput=journal
+
+[Install]
+WantedBy=multi-user.target
